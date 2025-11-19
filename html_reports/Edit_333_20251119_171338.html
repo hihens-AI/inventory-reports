@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>編輯 333</title>
+<style>
+  body{font-family:"Microsoft JhengHei",Arial;background:linear-gradient(135deg,#667eea,#764ba2);margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+  .box{background:white;padding:30px;border-radius:20px;box-shadow:0 15px 35px rgba(0,0,0,0.3);width:90%;max-width:600px;}
+  h1{text-align:center;color:#2c3e50;margin:0 0 20px;}
+  button{width:100%;padding:16px;background:#27ae60;color:white;border:none;border-radius:10px;font-size:18px;margin-top:20px;cursor:pointer;}
+  .msg{margin-top:20px;padding:15px;border-radius:10px;text-align:center;font-size:18px;display:none;}
+</style></head><body>
+<div class="box">
+  <h1>機台資訊編輯</h1>
+  <div style="text-align:center;font-size:24px;font-weight:bold;color:#8e44ad;margin:20px 0;">Part No: 333</div>
+  <form id="form"><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">請領單號 (Requisition No)</label><input type="text" name="請領單號 (Requisition No)" value="333" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">Part No</label><input type="text" name="Part No" value="333" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">Applicant</label><input type="text" name="Applicant" value="333" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">Applicant Department</label><input type="text" name="Applicant Department" value="333" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">Applicant ID</label><input type="text" name="Applicant ID" value="333" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">Qty Apply</label><input type="text" name="Qty Apply" value="333" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">Location</label><input type="text" name="Location" value="333" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">Reason</label><input type="text" name="Reason" value="333" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">Cost ID</label><input type="text" name="Cost ID" value="333" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">Process Date</label><input type="text" name="Process Date" value="333" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><div style="margin:12px 0;"><label style="font-weight:bold;display:block;">Remark</label><input type="text" name="Remark" value="" style="width:100%;padding:10px;font-size:16px;border:2px solid #ddd;border-radius:8px;"></div><button type="submit">儲存修改</button></form>
+  <div id="msg" class="msg"></div>
+</div>
+<script>
+document.getElementById('form').onsubmit = async function(e) {
+  e.preventDefault();
+  const btn = this.querySelector('button');
+  const msg = document.getElementById('msg');
+  btn.textContent = "儲存中..."; btn.disabled = true;
+  msg.style.display = "none";
+  const data = {};
+  new FormData(this).forEach((value, key) => data[key] = value.trim());
+  data["Part No"] = "333";
+  try {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbyMEzQ404EPM1o4V1SAqGjXfS5eI8cjWBNj4FzcTIshY1IDn7AGnhvB6-c5y7RRQVyfLQ/exec", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({action: "update", data: data})
+    });
+    const text = await res.text();
+    if (text.trim() === "success") {
+      msg.style.display = "block"; msg.style.background = "#d4edda"; msg.style.color = "#155724";
+      msg.textContent = "儲存成功！資料已更新";
+      setTimeout(() => alert("修改成功！"), 500);
+    } else {
+      msg.style.display = "block"; msg.style.background = "#f8d7da"; msg.style.color = "#721c24";
+      msg.textContent = "儲存失敗：" + text;
+    }
+  } catch(err) {
+    msg.style.display = "block"; msg.style.background = "#f8d7da"; msg.textContent = "網路錯誤";
+  }
+  btn.textContent = "儲存修改"; btn.disabled = false;
+};
+</script>
+</body></html>
