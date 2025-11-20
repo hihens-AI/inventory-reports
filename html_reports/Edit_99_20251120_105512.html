@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>編輯 99</title>
+<style>
+  body{font-family:"Microsoft JhengHei",Arial;background:#667eea;margin:0;padding:20px;}
+  .c{max-width:600px;margin:auto;background:white;padding:30px;border-radius:15px;box-shadow:0 10px 30px #0003;}
+  h1{text-align:center;color:#2c3e50;}
+  .p{text-align:center;font-size:22px;font-weight:bold;color:#8e44ad;margin:20px 0;}
+  input,button{width:100%;padding:14px;margin:10px 0;border-radius:8px;font-size:16px;}
+  button{background:#27ae60;color:white;border:none;font-weight:bold;}
+  .m{text-align:center;padding:15px;border-radius:8px;margin-top:20px;font-size:18px;display:none;}
+</style></head><body>
+<div class="c">
+  <h1>機台資訊編輯</h1>
+  <div class="p">Part No: 99</div>
+  <form id="f"><div class="f"><label>請領單號 (Requisition No)</label><input name="請領單號 (Requisition No)" value="99"></div><div class="f"><label>Part No</label><input name="Part No" value="99"></div><div class="f"><label>Applicant</label><input name="Applicant" value="99"></div><div class="f"><label>Applicant Department</label><input name="Applicant Department" value="99"></div><div class="f"><label>Applicant ID</label><input name="Applicant ID" value="99"></div><div class="f"><label>Qty Apply</label><input name="Qty Apply" value="99"></div><div class="f"><label>Location</label><input name="Location" value="99"></div><div class="f"><label>Reason</label><input name="Reason" value="99"></div><div class="f"><label>Cost ID</label><input name="Cost ID" value="99"></div><div class="f"><label>Process Date</label><input name="Process Date" value="99"></div><div class="f"><label>Remark</label><input name="Remark" value=""></div><button type="submit">儲存修改</button></form>
+  <div id="m" class="m"></div>
+</div>
+<script>
+document.getElementById('f').onsubmit = async function(e) {
+  e.preventDefault();
+  const b = this.querySelector('button');
+  b.textContent = "儲存中..."; b.disabled = true;
+  const d = {};
+  new FormData(this).forEach((v,k) => d[k] = v);
+  d["Part No"] = "99";
+  try {
+    const r = await fetch("https://script.google.com/macros/s/AKfycbyMEzQ404EPM1o4V1SAqGjXfS5eI8cjWBNj4FzcTIshY1IDn7AGnhvB6-c5y7RRQVyfLQ/exec", {method:"POST", body:JSON.stringify({action:"update", data:d}))});
+    const t = await r.text();
+    const m = document.getElementById('m');
+    if (t === "success") {
+      m.style.display = "block"; m.style.background = "#d4edda"; m.innerHTML = "儲存成功！已更新雲端";
+      setTimeout(() => alert("儲存成功！"), 1000);
+    } else {
+      m.style.display = "block"; m.style.background = "#f8d7da"; m.innerHTML = "失敗：" + t;
+    }
+  } catch(err) {
+    document.getElementById('m').innerHTML = "網路錯誤";
+    document.getElementById('m').style.background = "#f8d7da";
+    document.getElementById('m').style.display = "block";
+  }
+  b.textContent = "儲存修改"; b.disabled = false;
+};
+</script>
+</body></html>
