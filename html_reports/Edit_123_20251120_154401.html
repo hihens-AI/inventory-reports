@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>編輯 123</title>
+<style>
+  body{font-family:"Microsoft JhengHei",Arial;background:#667eea;margin:0;padding:20px;}
+  .c{max-width:600px;margin:auto;background:white;padding:30px;border-radius:15px;box-shadow:0 10px 30px #0003;}
+  h1{text-align:center;color:#2c3e50;}
+  .p{text-align:center;font-size:24px;font-weight:bold;color:#8e44ad;margin:20px 0;}
+  input,button{width:100%;padding:14px;margin:10px 0;border-radius:8px;font-size:16px;}
+  button{background:#27ae60;color:white;border:none;font-weight:bold;cursor:pointer;}
+  .m{text-align:center;padding:15px;border-radius:8px;margin-top:20px;font-size:18px;display:none;}
+</style></head><body>
+<div class="c">
+  <h1>機台資訊編輯</h1>
+  <div class="p">Part No: 123</div>
+  <form id="f"><div class="field"><label>請領單號 (Requisition No)</label><input name="請領單號 (Requisition No)" value="123"></div><div class="field"><label>Part No</label><input name="Part No" value="123"></div><div class="field"><label>Applicant</label><input name="Applicant" value="123"></div><div class="field"><label>Applicant Department</label><input name="Applicant Department" value="123"></div><div class="field"><label>Applicant ID</label><input name="Applicant ID" value="123"></div><div class="field"><label>Qty Apply</label><input name="Qty Apply" value="123"></div><div class="field"><label>Location</label><input name="Location" value="123"></div><div class="field"><label>Reason</label><input name="Reason" value="123"></div><div class="field"><label>Cost ID</label><input name="Cost ID" value="123"></div><div class="field"><label>Process Date</label><input name="Process Date" value="123"></div><div class="field"><label>Remark</label><input name="Remark" value=""></div><button type="submit">儲存修改</button></form>
+  <div id="m" class="m"></div>
+</div>
+<script>
+document.getElementById('f').onsubmit = async function(e) {
+  e.preventDefault();
+  const btn = this.querySelector('button');
+  btn.textContent = "儲存中..."; btn.disabled = true;
+  const d = {};
+  new FormData(this).forEach((v,k) => d[k] = v.trim());
+  d["Part No"] = "123";
+  try {
+    // 警告：此處使用外部 URL，您需要確保 WEB_APP_URL 已被正確設定為您的後端服務
+    const r = await fetch("https://your-external-app-script-url-here", {method:"POST", body:JSON.stringify({action:"update", data:d})});
+    const t = await r.text();
+    const m = document.getElementById('m');
+    if (t === "success") {
+      m.style.display = "block"; m.style.background = "#d4edda"; m.innerHTML = "儲存成功！資料已更新";
+      setTimeout(() => alert("修改成功！"), 1000);
+    } else {
+      m.style.display = "block"; m.style.background = "#f8d7da"; m.innerHTML = "失敗：" + t;
+    }
+  } catch { m.innerHTML = "網路錯誤"; m.style.background = "#f8d7da"; m.style.display = "block"; }
+  btn.textContent = "儲存修改"; btn.disabled = false;
+};
+</script>
+</body></html>
