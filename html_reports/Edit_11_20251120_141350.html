@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>編輯 11</title>
+<style>
+    body {font-family: "Microsoft JhengHei", Arial; margin:0; background:#f0f2f5; min-height:100vh; display:flex; align-items:center; justify-content:center;}
+    .container {width:90%; max-width:600px; background:white; padding:30px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.2);}
+    h1 {text-align:center; color:#2c3e50;}
+    .partno {text-align:center; font-size:22px; font-weight:bold; color:#8e44ad; margin:15px 0;}
+    input, button {width:100%; padding:14px; margin:10px 0; border-radius:8px; font-size:16px; box-sizing:border-box;}
+    input {border:2px solid #ddd;}
+    button {background:#27ae60; color:white; border:none; font-weight:bold; cursor:pointer;}
+    .msg {text-align:center; padding:15px; border-radius:8px; font-size:18px; font-weight:bold; margin-top:20px;}
+</style></head><body>
+<div class="container">
+    <h1>機台資訊編輯</h1>
+    <div class="partno">Part No: 11</div>
+    <form id="form"><div class="field"><label>請領單號 (Requisition No)</label><input type="text" name="請領單號 (Requisition No)" value="11"></div><div class="field"><label>Part No</label><input type="text" name="Part No" value="11"></div><div class="field"><label>Applicant</label><input type="text" name="Applicant" value="11"></div><div class="field"><label>Applicant Department</label><input type="text" name="Applicant Department" value="11"></div><div class="field"><label>Applicant ID</label><input type="text" name="Applicant ID" value="11"></div><div class="field"><label>Qty Apply</label><input type="text" name="Qty Apply" value="11"></div><div class="field"><label>Location</label><input type="text" name="Location" value="11"></div><div class="field"><label>Reason</label><input type="text" name="Reason" value="11"></div><div class="field"><label>Cost ID</label><input type="text" name="Cost ID" value="11"></div><div class="field"><label>Process Date</label><input type="text" name="Process Date" value="11"></div><div class="field"><label>Remark</label><input type="text" name="Remark" value=""></div><button type="submit">儲存修改</button></form>
+    <div id="msg" class="msg" style="display:none;"></div>
+</div>
+<script>
+document.getElementById('form').onsubmit = async function(e) {
+    e.preventDefault();
+    const btn = document.querySelector('button');
+    btn.textContent = "儲存中..."; btn.disabled = true;
+    const data = {};
+    new FormData(this).forEach((v, k) => data[k] = v.trim());
+    data["Part No"] = "11";
+    try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbyMEzQ404EPM1o4V1SAqGjXfS5eI8cjWBNj4FzcTIshY1IDn7AGnhvB6-c5y7RRQVyfLQ/exec", {method: "POST", body: JSON.stringify({action:"update", data}))});
+        const text = await res.text();
+        const msg = document.getElementById('msg');
+        if (text.includes("success")) {
+            msg.style.background = "#d4edda"; msg.style.color = "#155724";
+            msg.innerHTML = "儲存成功！即將為您重新整理資料";
+            msg.style.display = "block";
+            setTimeout(() => {
+                alert("儲存成功！資料已更新");
+                window.location.href = "https://docs.google.com/spreadsheets/d/1ovf6ooPdphROSptDU-NpWDs7wrzkPn-mVpqS7f_Ms8k/edit#gid=0";
+            }, 1500);
+        } else {
+            msg.style.background = "#f8d7da"; msg.style.color = "#721c24";
+            msg.innerHTML = "儲存失敗，請再試一次";
+            msg.style.display = "block";
+        }
+    } catch(err) {
+        document.getElementById('msg').innerHTML = "網路錯誤";
+        document.getElementById('msg').style.background = "#f8d7da";
+        document.getElementById('msg').style.color = "#721c24";
+        document.getElementById('msg').style.display = "block";
+    }
+    btn.textContent = "儲存修改"; btn.disabled = false;
+};
+</script>
+</body></html>
