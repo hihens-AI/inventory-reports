@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+    <html lang="zh-TW">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>編輯機台: eee</title>
+      <style>
+        body { font-family: "Microsoft JhengHei", sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        .field { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 15px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 10px; }
+        button:disabled { background-color: #ccc; }
+        #status { margin-top: 15px; text-align: center; font-weight: bold; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h2>機台資料編輯 (手機/電腦)</h2>
+        <div style="text-align:center; color:blue; margin-bottom:10px;">Part No: eee</div>
+        <div id="form-container">
+          
+        <div class="field">
+          <label>請領單號 (Requisition No)</label>
+          <input type="text" id="請領單號_(Requisition_No)" data-field-name="請領單號 (Requisition No)" value="eee" >
+        </div>
+        <div class="field">
+          <label>Part No</label>
+          <input type="text" id="Part_No" data-field-name="Part No" value="eee" readonly style="background:#e9ecef;">
+        </div>
+        <div class="field">
+          <label>Applicant</label>
+          <input type="text" id="Applicant" data-field-name="Applicant" value="eee" >
+        </div>
+        <div class="field">
+          <label>Applicant Department</label>
+          <input type="text" id="Applicant_Department" data-field-name="Applicant Department" value="" >
+        </div>
+        <div class="field">
+          <label>Applicant ID</label>
+          <input type="text" id="Applicant_ID" data-field-name="Applicant ID" value="" >
+        </div>
+        <div class="field">
+          <label>Qty Apply</label>
+          <input type="text" id="Qty_Apply" data-field-name="Qty Apply" value="" >
+        </div>
+        <div class="field">
+          <label>Location</label>
+          <input type="text" id="Location" data-field-name="Location" value="" >
+        </div>
+        <div class="field">
+          <label>Reason</label>
+          <input type="text" id="Reason" data-field-name="Reason" value="" >
+        </div>
+        <div class="field">
+          <label>Cost ID</label>
+          <input type="text" id="Cost_ID" data-field-name="Cost ID" value="" >
+        </div>
+        <div class="field">
+          <label>Process Date</label>
+          <input type="text" id="Process_Date" data-field-name="Process Date" value="" >
+        </div>
+        <div class="field">
+          <label>Remark</label>
+          <input type="text" id="Remark" data-field-name="Remark" value="" >
+        </div>
+        </div>
+        <button id="saveBtn" onclick="saveData()">儲存修改</button>
+        <div id="status"></div>
+      </div>
+      <script>
+        
+    async function saveData() {
+      const btn = document.getElementById('saveBtn');
+      const status = document.getElementById('status');
+      btn.disabled = true;
+      btn.innerText = "正在更新...";
+      status.innerText = "";
+      status.style.color = "black";
+
+      if (!"AKfycbwI5CQgWHNt267c3Ke2ud8-BaTUw2wLwPVJ55cfLFQtrtHDFp88aCwYLWC__NhS-vdqYA") {
+        status.innerText = "錯誤: Apps Script URL 未設定";
+        status.style.color = "red";
+        btn.disabled = false;
+        return;
+      }
+
+      // 收集資料
+      const newRowData = [];
+      document.querySelectorAll('#form-container input').forEach(input => {
+        newRowData.push(input.value);
+      });
+
+      try {
+        const response = await fetch("AKfycbwI5CQgWHNt267c3Ke2ud8-BaTUw2wLwPVJ55cfLFQtrtHDFp88aCwYLWC__NhS-vdqYA", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            partNo: "eee",
+            data: newRowData
+          })
+        });
+        const result = await response.json();
+        if (result.status === "更新成功") {
+          status.innerText = "更新成功！Sheets 已同步。";
+          status.style.color = "green";
+          btn.innerText = "儲存成功";
+          btn.disabled = true;
+        } else {
+          throw new Error(result.error || "未知錯誤");
+        }
+      } catch (e) {
+        status.innerText = "錯誤: " + e.message;
+        status.style.color = "red";
+        btn.disabled = false;
+      }
+      btn.innerText = "儲存修改";
+    }
+      </script>
+    </body>
+    </html>
